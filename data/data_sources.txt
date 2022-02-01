@@ -1,0 +1,7 @@
+County file: https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html
+Legend url https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2019_Land_Cover_L48/ows?service=WMS&request=GetLegendGraphic&format=image/png&width=20&height=20&layer=NLCD_2019_Land_Cover_L48&
+states: https://catalog.data.gov/dataset/tiger-line-shapefile-2017-nation-u-s-current-state-and-equivalent-national
+gdal_translate -of GTiff  C:\temp\input\a.img   C:\temp\output\a.tif
+gdal_translate *.tif out.tif -t_srs "+proj=longlat +ellps=WGS84"
+Projection = ESRI:102039
+gdal_translate nlcd_2019_land_cover_l48_20210604.tif out3.tif -projwin 922758.1280732111 643720.1794771074 1292651.174889578 183373.3128543886
