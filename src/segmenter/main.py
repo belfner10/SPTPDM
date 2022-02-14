@@ -1,9 +1,21 @@
-import numpy as np
-from scipy.spatial import distance_matrix
+import cv2
+from src.segmenter.funcs import simplify_image, create_graph, draw_regions
+from skimage.measure import label
 
-vectors = np.random.rand(*(10, 2))
-a = np.array([[0, 0], [1, 1], [-1, -1]])
+if __name__ == '__main__':
+    do_simplification = False
+    simplification_method = 'second_max'
+    image_path = 'images/500.png'
 
+    image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
 
-def get_medoid_index(arr):
-    return np.argmin(np.sum(distance_matrix(arr, arr), axis=1))
+    if do_simplification:
+        image = simplify_image(image, simplification_method)
+
+    labeled, num_regions = label(image, return_num=True)
+
+    label_classes, weights = create_graph(image, labeled)
+
+    draw_image = draw_regions(image * 7, labeled)
+
+    cv2.imwrite('out.png', draw_image)

@@ -18,7 +18,7 @@ width = xmax - xmin
 height = ymax - ymin
 # print(f'Height: {height}\nWidth: {width}')
 resolution = 30  # meters per pixel
-cell_size = 80  # size of created cells
+cell_size = 500  # size of created cells
 cells_height = int(height / resolution / cell_size + 1)
 cells_width = int(width / resolution / cell_size + 1)
 
@@ -96,7 +96,7 @@ def get_cell_args():
 
 
 if __name__ == '__main__':
-    os.makedirs(save_folder, exist_ok=True)
+
     # cells = get_cell_args()
     # import time
     #
@@ -109,7 +109,8 @@ if __name__ == '__main__':
     #
     # print(time.perf_counter() - s)
     save_folder = 'd2'
-    x, y = -1813207.2,2820896.6
+    os.makedirs(save_folder, exist_ok=True)
+    x, y = 722262.4,1748953.9
     cell_x, cell_y = get_cell_at_point(x, y)
     print(cell_x, cell_y)
     cell = get_single_cell_args(cell_x, cell_y)

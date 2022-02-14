@@ -70,6 +70,27 @@ def get_raster_as_arr(file_path: str):
     return arr
 
 
+def get_grey_color_map(file_path: str):
+    tree = ET.parse(f'{file_path}.aux.xml')
+    root = tree.getroot()
+    items = root.findall('PAMRasterBand/GDALRasterAttributeTable/Row')
+    hold = []
+    for x, item in enumerate(items):
+        i = item.findall('F')
+        if i[4].text:
+            hold.append(x)
+            print(i[4].text)
+    h = {t:x for x,t in zip(range(len(hold)),hold)}
+    g_lookup = {}
+    for x in range(256):
+        if x in h:
+            g_lookup[x] = h[x]
+        else:
+            g_lookup[x] = 0
+    g_l = lambda x: g_lookup[x]
+    return g_l,g_lookup
+
+
 def get_color_maps(file_path: str):
     tree = ET.parse(f'{file_path}.aux.xml')
     root = tree.getroot()
@@ -93,6 +114,11 @@ def get_color_maps(file_path: str):
     a_l = lambda x: a_lookup[x]
 
     return r_l, g_l, b_l, a_l
+
+
+def map_grey_colors(img_arr, color_map):
+    img_arr = np.vectorize(color_map)(img_arr).astype(np.uint8)
+    return img_arr
 
 
 def map_colors(img_arr, color_maps):
@@ -127,6 +153,19 @@ def render_file(file_path: str, save_path: str) -> None:
     img.save(save_path)
 
 
+def render_grey_file(file_path: str, save_path: str) -> None:
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f'{file_path} not found')
+    if not os.path.exists(file_path + '.aux.xml'):
+        raise FileNotFoundError(f'{file_path}.aux.xml not found')
+    img_arr = get_raster_as_arr(file_path)
+    if not np.any(img_arr):
+        return
+    color_map = get_grey_color_map(file_path)
+    img_arr2 = map_grey_colors(img_arr, color_map)
+
+    img = Image.fromarray(img_arr2)
+    img.save(save_path)
 
 
 if __name__ == '__main__':
