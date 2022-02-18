@@ -18,7 +18,7 @@ width = xmax - xmin
 height = ymax - ymin
 # print(f'Height: {height}\nWidth: {width}')
 resolution = 30  # meters per pixel
-cell_size = 500  # size of created cells
+cell_size = 100  # size of created cells
 cells_height = int(height / resolution / cell_size + 1)
 cells_width = int(width / resolution / cell_size + 1)
 
