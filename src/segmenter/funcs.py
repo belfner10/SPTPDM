@@ -85,7 +85,7 @@ def simplify_image(image: np.ndarray, method: str) -> np.ndarray:
     return simplified_image
 
 
-def create_graph(image: np.ndarray, labeled_image: np.ndarray) -> (dict, defaultdict):
+def create_graph(image: np.ndarray, labeled_image: np.ndarray, norm_weights: bool = False) -> (dict, defaultdict):
     """
     Creates adjacency matrix in the form of dictionary
     Parameters
@@ -94,6 +94,8 @@ def create_graph(image: np.ndarray, labeled_image: np.ndarray) -> (dict, default
         image with class labels
     labeled_image : np.ndarray
         image with region labels
+    norm_weights : bool
+        flag that enables normalization of weights to the range 0-1
     Returns
     -------
     label_classes: dict
@@ -117,9 +119,24 @@ def create_graph(image: np.ndarray, labeled_image: np.ndarray) -> (dict, default
                 weights[region_label][labeled_image[y + 1, x]] += 1
             if x != width - 1:
                 weights[region_label][labeled_image[y, x + 1]] += 1
+
+    if not norm_weights:
+        return label_classes, weights
+
+    max_val = 0
+    for key, value in weights.items():
+        for v in value.values():
+            max_val = max(max_val, v)
+
+    for key, value in weights.items():
+        for k2, v2 in value.items():
+            if key < k2:
+                value[k2] = v2 / max_val
+
     return label_classes, weights
 
-def method_3(image: np.ndarray, labeled_image: np.ndarray,num_labels: int):
+
+def method_3(image: np.ndarray, labeled_image: np.ndarray, num_labels: int, norm_weights: bool = False):
     label_classes = {}
     height, width = labeled_image.shape
     weights = np.zeros((num_labels + 1, num_labels + 1), dtype='float32')
@@ -138,12 +155,13 @@ def method_3(image: np.ndarray, labeled_image: np.ndarray,num_labels: int):
                 weights[value, labeled_image[y, x + 1]] += 1
 
     for i in range(len(weights)):
-        weights[i,i] = 0
+        weights[i, i] = 0
     weights = weights[1:, 1:]
-    m = np.amax(weights)
-    print(m)
-    # weights /= m
+    if norm_weights:
+        m = np.argmax(weights)
+        weights /= m
     return label_classes, weights
+
 
 def draw_regions(image, regions: np.ndarray) -> np.ndarray:
     scale_factor = 10
@@ -161,8 +179,6 @@ def draw_regions(image, regions: np.ndarray) -> np.ndarray:
                 if regions[y, x] != regions[y, x + 1]:
                     cv2.rectangle(drawing_image, ((x + 1) * scale_factor - 1 - thickness, y * scale_factor - 1), ((x + 1) * scale_factor - 1 + thickness, y * scale_factor + scale_factor - 1), 255, -1)
     return drawing_image
-
-
 
 
 if __name__ == '__main__':

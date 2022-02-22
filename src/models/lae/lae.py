@@ -3,7 +3,7 @@ import numpy as np
 from scipy import sparse as sp
 from time import perf_counter
 
-# tf.compat.v1.disable_eager_execution()
+tf.compat.v1.disable_eager_execution()
 
 
 #
@@ -135,7 +135,7 @@ def sparce_lae(adj_norm, adj, num_epochs, learning_rate):
 
 
 def tf1(adj_norm, adj, num_epochs, learning_rate):
-    components = 10
+    components = 100
     r = (adj != 0).astype(int).astype(adj.dtype)
     weight = float(adj.shape[0] * adj.shape[0] - r.sum()) / r.sum()
     norm = adj.shape[0] * adj.shape[0] / float((adj.shape[0] * r.shape[0] - r.sum()) * 2)
@@ -145,29 +145,36 @@ def tf1(adj_norm, adj, num_epochs, learning_rate):
     with tf.compat.v1.variable_scope('vars'):
         weight_tensor = weight_variable_glorot(adj_norm.shape[0], components,name='weights')
 
+    # Z = tf.sparse.sparse_dense_matmul(placeholders['adj_norm'], weight_tensor)
+    # An = tf.math.sigmoid(tf.linalg.matmul(Z, tf.transpose(Z)))
+    #
+    # loss = norm * tf.reduce_mean(tf.nn.weighted_cross_entropy_with_logits(tf.sparse.to_dense(placeholders['adj'],validate_indices=False), An, weight))
 
-    # def loss_func
     Z = tf.sparse.sparse_dense_matmul(adj_norm_tensor, weight_tensor)
     An = tf.math.sigmoid(tf.linalg.matmul(Z, tf.transpose(Z)))
 
-    loss = lambda: norm * tf.reduce_mean(tf.nn.weighted_cross_entropy_with_logits(adj_tensor, An, weight))
-    #
-    #
-    #
+    loss = norm * tf.reduce_mean(tf.nn.weighted_cross_entropy_with_logits(adj_tensor, An, weight))
+
+
+
     opt = tf.compat.v1.train.AdamOptimizer(learning_rate=learning_rate)
-    opt_op = opt.minimize(loss, var_list=[weight_tensor])
-    train_summary_writer = tf.summary.create_file_writer('log_dir')
+    opt_op = opt.minimize(loss)
+
     sess = tf.compat.v1.Session()
     sess.run(tf.compat.v1.global_variables_initializer())
-
+    train_summary_writer = tf.compat.v1.summary.FileWriter('log_dir',sess.graph)
+    with tf.compat.v1.name_scope('performance'):
+        summary = tf.compat.v1.summary.scalar('loss', loss)
     for epoch in range(num_epochs):
-        outs = sess.run([opt_op, loss])
-        with train_summary_writer.as_default():
-            tf.summary.scalar('loss', 5, step=epoch)
-        train_summary_writer.flush()
+        outs = sess.run([opt_op])
 
-        # if epoch % 25 == 0:
-        #     print(f'Epoch: {str(epoch).rjust(len(str(num_epochs-1)))}, Loss: {outs[1]} ')
+
+        sums = tf.compat.v1.summary.merge([summary])
+        train_summary_writer.add_summary(sess.run(sums),epoch)
+
+
+        if epoch % 100 == 0:
+            print(f'Epoch: {str(epoch).rjust(len(str(num_epochs-1)))}, Loss: {sess.run(loss)} ')
 
     #     opt.minimize(loss,[weight_tensor])
     #     print(loss())
@@ -176,7 +183,7 @@ def tf1(adj_norm, adj, num_epochs, learning_rate):
 def main():
     tf.random.set_seed(1)
 
-    learning_rate = .5
+    learning_rate = .1
     adj = np.load('adj500.npy')
     print(adj.shape[0])
     adj = adj / np.argmax(adj)
@@ -194,7 +201,7 @@ def main():
     adj_norm_sp = actual_normalize_sp(adjs)
     # sparce_lae(adj_norm_sp, adjs, 500, learning_rate)
     # print(perf_counter() - s)
-    tf1(adj_norm_sp, adjs, 500, learning_rate)
+    tf1(adj_norm_sp, adjs, 5000, learning_rate)
 
 
 if __name__ == '__main__':
