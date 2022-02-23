@@ -7,7 +7,7 @@ import multiprocessing as mp
 import gzip
 from PIL import Image
 
-raster = '../CreateImage/land_cover_data/nlcd_2019_land_cover_l48_20210604.tif'
+raster = 'land_cover_data/nlcd_2019_land_cover_l48_20210604.tif'
 save_folder = 'data'
 
 xmin = -2493045
@@ -23,15 +23,13 @@ cells_height = int(height / resolution / cell_size + 1)
 cells_width = int(width / resolution / cell_size + 1)
 
 
-# print(f'Cells hight: {cells_height}\nCells width: {cells_width}')
-
-
 def get_cell_at_point(x, y):
     x_offset = x - xmin
     cell_x = int(x_offset / resolution / cell_size)
     y_offset = y - ymin
     cell_y = int(y_offset / resolution / cell_size)
     return cell_x, cell_y
+
 
 # not complete
 # def get_img_around_point(x,y,size):
@@ -95,54 +93,56 @@ def get_cell_args():
     return cells
 
 
-if __name__ == '__main__':
+def format_bbox(x: int, y: int, width: int, height: int) -> [str]:
+    """
+    Formats bounding box term for raster calculations (x and y are the lower right corner of the image)
+    Parameters
+    ----------
+    x : int
+    y : int
+    width : int
+    height : int
 
-    # cells = get_cell_args()
-    # import time
-    #
-    # print(len(cells))
-    #
-    # s = time.perf_counter()
-    # with mp.Pool(10) as p:
-    #     results = list(tqdm.tqdm(p.imap_unordered(render_cell, cells, chunksize=10), total=len(cells)))
-    #     _ = results
-    #
-    # print(time.perf_counter() - s)
+    Returns
+    -------
+
+    """
+    # align bbox to cell boarders
+    x -= (x-xmin) % 30
+    y -= (y-ymin) % 30
+    width -= width % 30
+    height -= height % 30
+
+    if width == 0 or height == 0:
+        raise ValueError(f'Specified area too small')
+
+    bbox = [str(int(x)), str(int(y + height)), str(int(x + width)), str(int(y))]
+    return bbox
+
+
+
+
+
+if __name__ == '__main__':
     save_folder = 'd2'
     os.makedirs(save_folder, exist_ok=True)
-    x, y = 722262.4,1748953.9
-    cell_x, cell_y = get_cell_at_point(x, y)
-    print(cell_x, cell_y)
-    cell = get_single_cell_args(cell_x, cell_y)
-    file_stem, bbox = cell
-    render_cell(cell)
+    x, y = -1082535, 1566255
+    file_stem = 's'
+    width, height = 100 * resolution, 50 * resolution
+    bbox = format_bbox(x, y, width, height)
+    print(bbox)
+
+    # gdal_translate_window(raster, d, bbox)
+    # x, y = 722262.4, 1748953.9
+    # cell_x, cell_y = get_cell_at_point(x, y)
+    # print(cell_x, cell_y)
+    # cell = get_single_cell_args(cell_x, cell_y)
+    # file_stem, bbox = cell
+    # print(bbox,file_stem)
+    # render_cell(cell)
     gdal_translate_window(raster, os.path.join(save_folder, file_stem + '.tif'), bbox)
     arr = get_raster_as_arr(os.path.join(save_folder, file_stem + '.tif'))
     m, g_lookup = get_grey_color_map(os.path.join(save_folder, file_stem + '.tif'))
     arr = np.vectorize(m)(arr).astype(np.uint8)
-    l = max(g_lookup.values())
-    arr2 = np.eye(l + 1)[arr].astype('b') # 1 hot encoding of classes
-    # print(arr2)
-    print(arr2.nbytes)
-    red = np.packbits(arr2, axis=None)
-    # print(red)
-    print(red.nbytes)
-    unpacked = np.unpackbits(red, count=arr2.size).reshape(arr2.shape).view('b')
-    print(np.prod(arr2.shape), arr2.size)
-    # print(unpacked)
-    print(np.array_equal(arr2, unpacked))
-    # with open(,'wb') as outfile:
-    np.save(os.path.join(save_folder, file_stem + '+' + str(arr2.shape) + 'l.npy'), arr2)
-    np.save(os.path.join(save_folder, file_stem + '+' + str(arr2.shape) + '.npy'), red)
-    f = gzip.GzipFile(os.path.join(save_folder, file_stem + '+' + str(arr2.shape) + '.npy.gz'), 'wb')
-    np.save(f, red)
-    f.close()
     img = Image.fromarray(arr)
     img.save(os.path.join(save_folder, file_stem + 'g.png'))
-
-    f = gzip.GzipFile(os.path.join(save_folder, file_stem + '+' + str(arr2.shape) + '.npy.gz'), 'rb')
-    arr3 = np.unpackbits(np.load(f), count=arr2.size).reshape(arr2.shape).view('b')
-    f.close()
-    print(np.array_equal(arr2, arr3))
-    # render_grey_cell(cell)
-    # render_cell(cell)

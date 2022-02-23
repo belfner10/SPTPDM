@@ -1,6 +1,6 @@
 from collections import Counter, defaultdict
 from typing import Callable
-
+from skimage.measure import label
 import cv2
 import numpy as np
 
@@ -85,7 +85,7 @@ def simplify_image(image: np.ndarray, method: str) -> np.ndarray:
     return simplified_image
 
 
-def create_graph(image: np.ndarray, labeled_image: np.ndarray, norm_weights: bool = False) -> (dict, defaultdict):
+def create_dict_adj(image: np.ndarray, labeled_image: np.ndarray, norm_weights: bool = False) -> (dict, defaultdict):
     """
     Creates adjacency matrix in the form of dictionary
     Parameters
@@ -136,7 +136,26 @@ def create_graph(image: np.ndarray, labeled_image: np.ndarray, norm_weights: boo
     return label_classes, weights
 
 
-def method_3(image: np.ndarray, labeled_image: np.ndarray, num_labels: int, norm_weights: bool = False):
+def create_np_adj(image: np.ndarray, labeled_image: np.ndarray, num_labels: int, norm_weights: bool = False) -> (dict, np.array):
+    """
+    Creates adjacency matrix in the form of numpy array
+    Parameters
+    ----------
+    image : np.ndarray
+        image with class labels
+    labeled_image : np.ndarray
+        image with region labels
+    num_labels: int
+        number of regions found in the image
+    norm_weights : bool
+        flag that enables normalization of weights to the range 0-1
+    Returns
+    -------
+    label_classes: dict
+        dict mapping
+    weights: np.array
+        numpy adjacency matrix
+    """
     label_classes = {}
     height, width = labeled_image.shape
     weights = np.zeros((num_labels + 1, num_labels + 1), dtype='float32')
@@ -158,18 +177,18 @@ def method_3(image: np.ndarray, labeled_image: np.ndarray, num_labels: int, norm
         weights[i, i] = 0
     weights = weights[1:, 1:]
     if norm_weights:
-        m = np.argmax(weights)
+        m = np.max(weights)
         weights /= m
     return label_classes, weights
 
 
+# unused
 def draw_regions(image, regions: np.ndarray) -> np.ndarray:
     scale_factor = 10
     thickness = 0
     thickness = int(thickness / 2)
     heigth, width = image.shape
     drawing_image = cv2.resize(image, (heigth * scale_factor, width * scale_factor), interpolation=cv2.INTER_NEAREST)
-    # cv2.rectangle(drawing_image,(0,100),(200,150),255,-1)
     for y in range(heigth):
         for x in range(width):
             if y != heigth - 1:
@@ -179,6 +198,18 @@ def draw_regions(image, regions: np.ndarray) -> np.ndarray:
                 if regions[y, x] != regions[y, x + 1]:
                     cv2.rectangle(drawing_image, ((x + 1) * scale_factor - 1 - thickness, y * scale_factor - 1), ((x + 1) * scale_factor - 1 + thickness, y * scale_factor + scale_factor - 1), 255, -1)
     return drawing_image
+
+
+def create_np_adj_from_image(image: np.array, smp_method: str = None, verbose=False):
+    if smp_method:
+        image = simplify_image(image, smp_method)
+    labeled, num_regions = label(image, return_num=True)
+
+    if verbose:
+        print(f'Number of regions: {num_regions}')
+
+    label_classes, weights = create_np_adj(image, labeled, num_regions)
+    return label_classes, weights
 
 
 if __name__ == '__main__':

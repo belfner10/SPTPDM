@@ -186,7 +186,7 @@ def main():
     learning_rate = .1
     adj = np.load('adj500.npy')
     print(adj.shape[0])
-    adj = adj / np.argmax(adj)
+    adj = adj / np.max(adj)
 
     # print(actual_normalize(adj))
     dense = False

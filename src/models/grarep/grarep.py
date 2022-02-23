@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import normalize
 from sklearn.decomposition import TruncatedSVD
 
-seed = 42
-np.random.seed(seed)
+# seed = 42435
+# np.random.seed(seed)
 
 
 def norm_adj_sp(adj):
@@ -60,8 +60,10 @@ def get_k_components(adj, k, lambda_v, n_components=2, n_iter=20, rseed=None):
 
 
 if __name__ == '__main__':
-    # sp.csr_matrix()
     size = 20
-    adj = sp.csr_matrix(random_adj_sp(size, .35))
+    # adj = sp.csr_matrix(random_adj_sp(size, .35))
+    adj = sp.load_npz('out.npz')
     lambda_v = 3
-    print(get_k_components(adj, 2, lambda_v))
+    out = get_k_components(adj, 3, lambda_v,n_components=4)
+    print(out)
+    np.save('out',out)

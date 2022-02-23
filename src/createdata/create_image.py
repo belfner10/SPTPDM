@@ -1,66 +1,9 @@
-import fiona
-import numpy as np
 import os
-from osgeo import gdal
-from PIL import Image
 import xml.etree.ElementTree as ET
 
-
-# with fiona.open("projected/test.shp", "r") as shapefile:
-#     state_indicies = [feature['properties']['NAME'] for feature in shapefile]
-#     xs = [pt[0] for pt in shapefile[state_indicies.index('Ohio')]['geometry']['coordinates'][0]]
-#     ys = [pt[1] for pt in shapefile[state_indicies.index('Ohio')]['geometry']['coordinates'][0]]
-#     print(max(xs), min(xs), max(ys), min(ys))
-#     ul = (min(xs), max(ys))
-#     lr = (max(xs), min(ys))
-#     print(f'-projwin {ul[0]} {ul[1]} {lr[0]} {lr[1]}')
-
-
-# dataset = gdal.Open('nlcd_2019_land_cover_l48_20210604/out3.tif', gdal.GA_ReadOnly)
-# # Note GetRasterBand() takes band no. starting from 1 not 0
-# band = dataset.GetRasterBand(1)
-# arr = band.ReadAsArray()
-# print(arr.shape)
-# print(arr.dtype)
-
-
-# tree = ET.parse('nlcd_2019_land_cover_l48_20210604/out3.tif.aux.xml')
-# root = tree.getroot()
-# items = root.findall('PAMRasterBand/GDALRasterAttributeTable/Row')
-#
-# r_lookup = {}
-# g_lookup = {}
-# b_lookup = {}
-# a_lookup = {}
-#
-# for x, item in enumerate(items):
-#     i = item.findall('F')
-#     r_lookup[x] = int(i[0].text)
-#     g_lookup[x] = int(i[1].text)
-#     b_lookup[x] = int(i[2].text)
-#     a_lookup[x] = int(i[3].text)
-#
-# r_l = lambda x: r_lookup[x]
-# g_l = lambda x: g_lookup[x]
-# b_l = lambda x: b_lookup[x]
-# a_l = lambda x: a_lookup[x]
-#
-# img_r = np.vectorize(r_l)(arr)
-# print('R done')
-# img_g = np.vectorize(g_l)(arr)
-# print('G done')
-# img_b = np.vectorize(b_l)(arr)
-# print('B done')
-# img_a = np.vectorize(a_l)(arr)
-# print('A done')
-#
-# img = np.stack((img_r, img_g, img_b, img_a), axis=2).astype(np.uint8)
-# print(img.shape, img.dtype)
-#
-#
-# im = Image.fromarray(img)
-# print('Saving Image')
-# im.save("filename.png")
+import numpy as np
+from PIL import Image
+from osgeo import gdal
 
 
 def get_raster_as_arr(file_path: str):
@@ -80,7 +23,7 @@ def get_grey_color_map(file_path: str):
         if i[4].text:
             hold.append(x)
             print(i[4].text)
-    h = {t:x for x,t in zip(range(len(hold)),hold)}
+    h = {t: x for x, t in zip(range(len(hold)), hold)}
     g_lookup = {}
     for x in range(256):
         if x in h:
@@ -88,7 +31,7 @@ def get_grey_color_map(file_path: str):
         else:
             g_lookup[x] = 0
     g_l = lambda x: g_lookup[x]
-    return g_l,g_lookup
+    return g_l, g_lookup
 
 
 def get_color_maps(file_path: str):

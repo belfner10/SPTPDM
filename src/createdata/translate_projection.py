@@ -31,6 +31,7 @@ def create_transform(layer):
 
 
 def gdal_translate_window(input_image_path, output_image_path, bounding_box):
+    print(' '.join(['gdal_translate', input_image_path, output_image_path, '-projwin'] + bounding_box))
     subprocess.call(['gdal_translate', input_image_path, output_image_path, '-projwin'] + bounding_box, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 
 
