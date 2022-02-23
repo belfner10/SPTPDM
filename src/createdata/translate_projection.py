@@ -1,5 +1,5 @@
 import os
-from src.CreateImage.create_image import render_file
+from src.createdata.create_image import render_file
 from osgeo import ogr, osr
 import subprocess
 from tqdm.contrib.concurrent import process_map

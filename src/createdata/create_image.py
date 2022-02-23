@@ -22,7 +22,7 @@ def get_grey_color_map(file_path: str):
         i = item.findall('F')
         if i[4].text:
             hold.append(x)
-            print(i[4].text)
+            # print(i[4].text)
     h = {t: x for x, t in zip(range(len(hold)), hold)}
     g_lookup = {}
     for x in range(256):

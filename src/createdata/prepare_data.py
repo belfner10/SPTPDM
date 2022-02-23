@@ -1,5 +1,5 @@
-from src.CreateImage.translate_projection import gdal_translate_window
-from src.CreateImage.create_image import render_file, render_grey_file, get_raster_as_arr, get_grey_color_map
+from src.createdata.translate_projection import gdal_translate_window
+from src.createdata.create_image import render_file, render_grey_file, get_raster_as_arr, get_grey_color_map
 import os
 import numpy as np
 import tqdm
@@ -7,7 +7,7 @@ import multiprocessing as mp
 import gzip
 from PIL import Image
 
-raster = 'land_cover_data/nlcd_2019_land_cover_l48_20210604.tif'
+raster = r'M:\Spatial_Temporal_Mining\Project\src\createdata\land_cover_data\nlcd_2019_land_cover_l48_20210604.tif'
 save_folder = 'data'
 
 xmin = -2493045

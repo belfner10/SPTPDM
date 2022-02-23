@@ -1,8 +1,10 @@
 from collections import Counter, defaultdict
 from typing import Callable
-from skimage.measure import label
+
 import cv2
 import numpy as np
+import scipy.sparse as sp
+from skimage.measure import label
 
 
 def window(image: np.ndarray, y: int, x: int, value: int, method: Callable) -> (bool, int):
@@ -182,6 +184,60 @@ def create_np_adj(image: np.ndarray, labeled_image: np.ndarray, num_labels: int,
     return label_classes, weights
 
 
+def create_sp_adj(image: np.ndarray, labeled_image: np.ndarray, num_labels: int, norm_weights: bool = False) -> (dict, np.array):
+    """
+    Creates adjacency matrix in the form of numpy array
+    Parameters
+    ----------
+    image : np.ndarray
+        image with class labels
+    labeled_image : np.ndarray
+        image with region labels
+    num_labels: int
+        number of regions found in the image
+    norm_weights : bool
+        flag that enables normalization of weights to the range 0-1
+    Returns
+    -------
+    label_classes: dict
+        dict mapping
+    weights: np.array
+        numpy adjacency matrix
+    """
+    label_classes = {}
+    height, width = labeled_image.shape
+    weights = sp.lil_matrix((num_labels + 1, num_labels + 1), dtype='float32')
+    for x in range(width):
+        for y in range(height):
+            value = labeled_image[y, x]
+            if value not in label_classes:
+                label_classes[value] = image[y, x]
+            if y != 0:
+                weights[value, labeled_image[y - 1, x]] += 1
+            if x != 0:
+                weights[value, labeled_image[y, x - 1]] += 1
+            if y != height - 1:
+                weights[value, labeled_image[y + 1, x]] += 1
+            if x != width - 1:
+                weights[value, labeled_image[y, x + 1]] += 1
+
+    for i in range(weights.shape[0]):
+        weights[i, i] = 0
+    weights = weights[1:, 1:]
+    weights = sp.coo_matrix(weights)
+    weights.data = weights.data / np.max(weights.data)
+    return label_classes, weights
+
+
+def dict_to_sp(d, num_labels):
+    weights = sp.lil_matrix((num_labels + 1, num_labels + 1), dtype='float32')
+    for key, value in d.items():
+        for k2, v2 in value.items():
+            if key != k2:
+                weights[key, k2] = v2
+    return sp.csr_matrix(weights)
+
+
 # unused
 def draw_regions(image, regions: np.ndarray) -> np.ndarray:
     scale_factor = 10
@@ -208,7 +264,10 @@ def create_np_adj_from_image(image: np.array, smp_method: str = None, verbose=Fa
     if verbose:
         print(f'Number of regions: {num_regions}')
 
-    label_classes, weights = create_np_adj(image, labeled, num_regions)
+    label_classes, weights = create_dict_adj(image, labeled, num_regions)
+    weights = dict_to_sp(weights, num_regions)
+
+    # label_classes, weights = create_sp_adj(image, labeled, num_regions)
     return label_classes, weights
 
 
