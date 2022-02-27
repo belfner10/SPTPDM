@@ -1,0 +1,73 @@
+\documentclass[journal,compsoc]{IEEEtran}
+%\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Graph Based Approach to Unsupervised Clustering of USA Land Cover}
+
+\author{\IEEEauthorblockN{Benjaimin Elfner}
+\IEEEauthorblockA{\textit{CEAS} \\
+\textit{University of Cincinnati}\\
+Cincinnati, USA \\
+elfnerbm@mail.uc.edu}
+}
+
+\maketitle
+
+\begin{abstract}
+This document is a model and instructions for \LaTeX.
+This and the IEEEtran.cls file define the components of your paper [title, text, heads, etc.]. *CRITICAL: Do Not Use %Symbols, Special Characters, Footnotes, 
+or Math in Paper Title or Abstract.
+\end{abstract}
+
+\begin{IEEEkeywords}
+component, formatting, style, styling, insert
+\end{IEEEkeywords}
+
+\section{Introduction}
+Land cover analysis is crucial to forming decisions for tasks such as climate change or land management\cite{doi:10.1080/13658816.2015.1134796}. Regions can be formed by finding areas of land that exhibit similar spatial patterns of land cover also known as land pattern types (LPTs). These regions are important to many fields since they allow generalizations to be made of the land contained which can speed up analysis\cite{doi:10.1080/13658816.2015.1134796}. For example, measurements in one part of a region could apply to all related area of land which reduces the work required to collect data.
+
+\section{Underling Data Mining Problem}
+For a given area of classified land cover (represented as a image), form regions of similar land pattern types.
+
+\section{Data Used}
+The data that will be used is the NLCD 2019 Land Cover (CONUS) dataset. This data, collected in
+2019, consists of a classification for each 30x30 meter square in the contiguous 48 US states.
+There are 16 classes that describe contents of the land cover for each square. \cite{NLCD2019LandCover}
+
+\section{Related Works}
+Previously this problem was approached used the formation of motifels, small tiling subsections of the land cover data \cite{doi:10.1080/13658816.2015.1134796}. A co-occurrence histogram was created for each motifel where pixel adjacency are categorized and counted. These histograms are combined into contiguous segments using the similarity of motifels' histogram then those segments were clustered using hierarchical clustering. The benefit of this approach is reduced computational complexity since the data can be split into sections larger than a single pixel. The downside to this approach is the measure of similarity only considers the connections between two pixel and ignores larger patterns found in the data.
+
+
+\section{Our Approach}
+We will approach this problem by viewing land cover data as a weighted planar graph. Each contiguous segment of land cover that shares a common class will represent the vertices and the edges will be between adjacent segments with a weighting equal to the length of the shared perimeter. 
+
+With this representation new approaches can be used to compare vertices of the graph. In this paper we will be comparing three methods. These methods were selected due to their varying methodologies, optimization methods, and experimental performance. Each method produces vector embedding for each vertex of the graph. These vectors will be clustered using hierarchical clustering with ward linkage.
+
+\subsection{Graph Autoencoders \cite{SalhaGalvan2019KeepIS}}
+An autoencoder is a model that is able to take data and convert it to a different representation of the data. Most of the time this new representation has reduced dimensionality or is able to represent the original data in a new format that is more conducive to other data mining tasks. The strength of an autoencoder is judged on its ability to recreate the input from the reduced form. A graph autoencoder is able to convert a vertex to a vector representation.
+
+\subsection{GraRep \cite{Cao2015GraRepLG}}
+GraRep creates a vector of step representations for each vertex on a graph. The ${k}$th value in the vector encodes information about graph ${k}$ steps from the vertex.
+
+\subsection{LINE \cite{Tang2015LINELI}}
+LINE creates vector representations for each vertex but unlike GraRep, the vector only represents a single  ${k}$ steps from the vertex.
+
+
+\section{Evaluation}
+The resulting trees for each embedding algorithm can be split such that a desired number of regions are formed. Due to this fact as well as the methods being unsupervised means the resulting regions do not have any human defined meaning nor can the clusters be quantitative compared a ground truth. Therefore, the assessment will be based solely on the usefulness of the clusters. This will be done by examining the patterns found in each cluster qualitatively. The resulting clusters structure will also be compared to regions created by human conducted surveys.
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{./references}
+
+
+\end{document}
