@@ -13,6 +13,8 @@ def create_several_clustes(vecs, image_path):
     return image
 
 
+
+
 if __name__ == '__main__':
     vecs = np.load('out_grarep.np.npy')[:, 1:]
 

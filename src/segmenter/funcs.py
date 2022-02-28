@@ -230,11 +230,11 @@ def create_sp_adj(image: np.ndarray, labeled_image: np.ndarray, num_labels: int,
 
 
 def dict_to_sp(d, num_labels):
-    weights = sp.lil_matrix((num_labels + 1, num_labels + 1), dtype='float32')
+    weights = sp.lil_matrix((num_labels, num_labels), dtype='float32')
     for key, value in d.items():
         for k2, v2 in value.items():
             if key != k2:
-                weights[key, k2] = v2
+                weights[key-1, k2-1] = v2
     return sp.csr_matrix(weights)
 
 
@@ -268,8 +268,8 @@ def create_np_adj_from_image(image: np.array, smp_method: str = None, verbose=Fa
     weights = dict_to_sp(weights, num_regions)
 
     # label_classes, weights = create_sp_adj(image, labeled, num_regions)
-    return label_classes, weights
+    return label_classes, weights, labeled
 
 
 if __name__ == '__main__':
-    simplify_image(1, 'test')
+    simplify_image(1, 'max')

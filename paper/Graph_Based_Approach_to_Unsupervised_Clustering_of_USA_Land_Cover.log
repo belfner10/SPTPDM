@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.2.11)  27 FEB 2022 14:48
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.2.11)  27 FEB 2022 15:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**projectproposal.tex
-(./projectproposal.tex
+**Graph_Based_Approach_to_Unsupervised_Clustering_of_USA_Land_Cover.tex
+(./Graph_Based_Approach_to_Unsupervised_Clustering_of_USA_Land_Cover.tex
 LaTeX2e <2021-11-15> patch level 1
 L3 programming layer <2022-02-05>
 (c:/texlive/2021/texmf-dist/tex/latex/ieeetran/IEEEtran.cls
@@ -252,8 +252,9 @@ File: l3backend-pdftex.def 2022-02-07 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count282
 \l__pdf_internal_box=\box54
 )
-(./projectproposal.aux)
-\openout1 = `projectproposal.aux'.
+(./Graph_Based_Approach_to_Unsupervised_Clustering_of_USA_Land_Cover.aux)
+\openout1 = `Graph_Based_Approach_to_Unsupervised_Clustering_of_USA_Land_Cover.
+aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
 LaTeX Font Info:    ... okay on input line 12.
@@ -327,26 +328,29 @@ LaTeX Font Info:    Calculating math sizes for size <9.53561> on input line 59.
  [1{c:/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 
-] (./projectproposal.bbl) [2
-
 ]
-(./projectproposal.aux) ) 
+(./Graph_Based_Approach_to_Unsupervised_Clustering_of_USA_Land_Cover.bbl)
+[2
+
+] (./Graph_Based_Approach_to_Unsupervised_Clustering_of_USA_Land_Cover.aux) ) 
 Here is how much of TeX's memory you used:
  4269 strings out of 478278
- 66591 string characters out of 5850546
- 366911 words of memory out of 5000000
+ 67341 string characters out of 5850546
+ 367011 words of memory out of 5000000
  22428 multiletter control sequences out of 15000+600000
  515373 words of font info for 131 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,6n,62p,779b,325s stack positions out of 5000i,500n,10000p,200000b,80000s
-{c:/texlive/2021/texmf-dist/fonts/enc/dvips/base/8r.en
-c}<c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/tex
-live/2021/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb><c:/texlive/2021/texmf
--dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/texlive/2021/texmf-dist/fonts/typ
-e1/urw/helvetic/uhvro8a.pfb><c:/texlive/2021/texmf-dist/fonts/type1/urw/palatin
-o/uplr8a.pfb><c:/texlive/2021/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb><
-c:/texlive/2021/texmf-dist/fonts/type1/urw/zapfding/uzdr.pfb>
-Output written on projectproposal.pdf (2 pages, 82692 bytes).
+ 55i,6n,62p,830b,325s stack positions out of 5000i,500n,10000p,200000b,80000s
+{c
+:/texlive/2021/texmf-dist/fonts/enc/dvips/base/8r.enc}<c:/texlive/2021/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2021/texmf-dist/fonts/
+type1/urw/helvetic/uhvb8a.pfb><c:/texlive/2021/texmf-dist/fonts/type1/urw/helve
+tic/uhvr8a.pfb><c:/texlive/2021/texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb
+><c:/texlive/2021/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><c:/texlive/20
+21/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb><c:/texlive/2021/texmf-dist/
+fonts/type1/urw/zapfding/uzdr.pfb>
+Output written on Graph_Based_Approach_to_Unsupervised_Clustering_of_USA_Land_C
+over.pdf (2 pages, 82695 bytes).
 PDF statistics:
  47 PDF objects out of 1000 (max. 8388607)
  28 compressed objects within 1 object stream
