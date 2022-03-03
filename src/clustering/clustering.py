@@ -80,6 +80,15 @@ def draw_clusters(comps, labeled, filename, n_clusters=5, method='kmeans'):
     cv2.imwrite(filename, cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
 
 
+def draw_labels(labeled, n_labels, filename):
+    r_l, g_l, b_l = create_color_maps(n_labels)
+    img_r = np.vectorize(r_l)(labeled-1)
+    img_g = np.vectorize(g_l)(labeled-1)
+    img_b = np.vectorize(b_l)(labeled-1)
+    img = np.stack((img_r, img_g, img_b), axis=2).astype(np.uint8)
+    cv2.imwrite(filename, cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
+
+
 def main():
     vecs = np.load('out_grarep.np.npy')[:, 1:]
 

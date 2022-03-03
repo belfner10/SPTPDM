@@ -87,7 +87,7 @@ def simplify_image(image: np.ndarray, method: str) -> np.ndarray:
     return simplified_image
 
 
-def create_dict_adj(image: np.ndarray, labeled_image: np.ndarray, norm_weights: bool = False) -> (dict, defaultdict):
+def create_dict_adj(image: np.ndarray, labeled_image: np.ndarray, norm_weights: bool = True) -> (dict, defaultdict):
     """
     Creates adjacency matrix in the form of dictionary
     Parameters
@@ -127,8 +127,9 @@ def create_dict_adj(image: np.ndarray, labeled_image: np.ndarray, norm_weights: 
 
     max_val = 0
     for key, value in weights.items():
-        for v in value.values():
-            max_val = max(max_val, v)
+        for k, v in value.items():
+            if key < k:
+                max_val = max(max_val, v)
 
     for key, value in weights.items():
         for k2, v2 in value.items():
@@ -255,7 +256,7 @@ def draw_regions(image, regions: np.ndarray) -> np.ndarray:
                     cv2.rectangle(drawing_image, ((x + 1) * scale_factor - 1 - thickness, y * scale_factor - 1), ((x + 1) * scale_factor - 1 + thickness, y * scale_factor + scale_factor - 1), 255, -1)
     return drawing_image
 
-
+# TODO rename np to sp
 def create_np_adj_from_image(image: np.array, smp_method: str = None, verbose=False):
     if smp_method:
         image = simplify_image(image, smp_method)
@@ -270,6 +271,17 @@ def create_np_adj_from_image(image: np.array, smp_method: str = None, verbose=Fa
     # label_classes, weights = create_sp_adj(image, labeled, num_regions)
     return label_classes, weights, labeled
 
+def create_dict_adj_from_image(image: np.array, smp_method: str = None, verbose=False):
+    if smp_method:
+        image = simplify_image(image, smp_method)
+    labeled, num_regions = label(image, return_num=True)
+
+    if verbose:
+        print(f'Number of regions: {num_regions}')
+
+    label_classes, weights = create_dict_adj(image, labeled, num_regions)
+
+    return label_classes, weights, labeled
 
 if __name__ == '__main__':
     simplify_image(1, 'max')

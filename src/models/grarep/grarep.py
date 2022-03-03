@@ -80,13 +80,12 @@ def get_comps(aks, n_components=2):
     return components
 
 
-def get_comps2(adj, lambda_v=1, n_components=4):
+def get_grarep_comps(adj, k, lambda_v=1, n_components=4):
     norm = normalize(adj, 'l1', axis=1)
     ak = norm.copy()
     components = []
-    for x in tqdm.tqdm(range(n_components)):
-        r = ak.sum(axis=0)
-        yk = ak.dot(r.T)
+    for x in tqdm.tqdm(range(k)):
+        yk = normalize(ak, 'l1', axis=0)
         yk = sp.coo_matrix(yk)
         yk.data = np.log(yk.data) - np.log(lambda_v / yk.shape[0])
         yk.col = yk.col[yk.data > 0]
@@ -140,6 +139,6 @@ if __name__ == '__main__':
     # out = get_k_components(adj, 5, lambda_v, n_components=4)
     s = perf_counter()
 
-    get_comps2(adj, n_components=5)
+    get_grarep_comps(adj, n_components=5)
     print(perf_counter() - s)
     # np.save('out', out)
