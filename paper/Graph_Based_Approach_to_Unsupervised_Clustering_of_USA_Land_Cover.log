@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.2.11)  27 FEB 2022 15:33
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.2.11)  5 MAR 2022 17:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -247,43 +247,87 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1373.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1374.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1375.
 )
+(c:/texlive/2021/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2020/10/26 v3.5g Customizing captions (AR)
+
+(c:/texlive/2021/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2020/10/21 v2.2e caption3 kernel (AR)
+\captionmargin=\dimen173
+\captionmargin@=\dimen174
+\captionwidth=\dimen175
+\caption@tempdima=\dimen176
+\caption@indent=\dimen177
+\caption@parindent=\dimen178
+\caption@hangindent=\dimen179
+Package caption Info: Unknown document class (or package),
+(caption)             standard defaults will be used.
+Package caption Info: \@makecaption = \long macro:#1#2->\ifx \@captype \@IEEEta
+blestring \footnotesize \bgroup \par \centering \@IEEEtabletopskipstrut {\norma
+lfont \sffamily \footnotesize #1}\\{\normalfont \sffamily \footnotesize #2}\par
+ \addvspace {0.5\baselineskip }\egroup \@IEEEtablecaptionsepspace \else \@IEEEf
+igurecaptionsepspace \setbox \@tempboxa \hbox {\normalfont \sffamily \footnotes
+ize {#1.}\nobreakspace #2}\ifdim \wd \@tempboxa >\hsize \setbox \@tempboxa \hbo
+x {\normalfont \sffamily \footnotesize {#1.}\nobreakspace }\parbox [t]{\hsize }
+{\normalfont \sffamily \footnotesize \noindent \unhbox \@tempboxa #2}\else \hbo
+x to\hsize {\normalfont \sffamily \footnotesize \box \@tempboxa \hfil }\fi \fi 
+ on input line 1139.
+)
+
+Package caption Warning: Unknown document class (or package),
+(caption)                standard defaults will be used.
+See the caption package documentation for explanation.
+
+\c@caption@flags=\count282
+\c@continuedfloat=\count283
+) (c:/texlive/2021/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2020/10/07 v1.3j Sub-captions (AR)
+\c@subfigure=\count284
+\c@subtable=\count285
+)
+(c:/texlive/2021/texmf-dist/tex/latex/multirow/multirow.sty
+Package: multirow 2021/03/15 v2.8 Span multiple rows of a table
+\multirow@colwidth=\skip55
+\multirow@cntb=\count286
+\multirow@dima=\skip56
+\bigstrutjot=\dimen180
+)
 (c:/texlive/2021/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2022-02-07 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count282
+\l__color_backend_stack_int=\count287
 \l__pdf_internal_box=\box54
 )
 (./Graph_Based_Approach_to_Unsupervised_Clustering_of_USA_Land_Cover.aux)
 \openout1 = `Graph_Based_Approach_to_Unsupervised_Clustering_of_USA_Land_Cover.
 aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
 
 -- Lines per column: 61 (exact).
 (c:/texlive/2021/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count283
-\scratchdimen=\dimen173
+\scratchcounter=\count288
+\scratchdimen=\dimen181
 \scratchbox=\box55
-\nofMPsegments=\count284
-\nofMParguments=\count285
+\nofMPsegments=\count289
+\nofMParguments=\count290
 \everyMPshowfont=\toks23
-\MPscratchCnt=\count286
-\MPscratchDim=\dimen174
-\MPnumerator=\count287
-\makeMPintoPDFobject=\count288
+\MPscratchCnt=\count291
+\MPscratchDim=\dimen182
+\MPnumerator=\count292
+\makeMPintoPDFobject=\count293
 \everyMPtoPDFconversion=\toks24
 ) (c:/texlive/2021/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -294,66 +338,106 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
 LaTeX Font Info:    Trying to load font information for OT1+phv on input line 2
-3.
+7.
 
 (c:/texlive/2021/texmf-dist/tex/latex/psnfss/ot1phv.fd
 File: ot1phv.fd 2020/03/25 scalable font definitions for OT1/phv.
 )
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <11.04124> not available
-(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 23.
-LaTeX Font Info:    Calculating math sizes for size <11.04124> on input line 23
+(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 27.
+LaTeX Font Info:    Calculating math sizes for size <11.04124> on input line 27
 .
-LaTeX Font Info:    Trying to load font information for U+msa on input line 23.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 27.
 
 
 (c:/texlive/2021/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 23.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 27.
 
 
 (c:/texlive/2021/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for U+pzd on input line 23.
+LaTeX Font Info:    Trying to load font information for U+pzd on input line 27.
 
 
 (c:/texlive/2021/texmf-dist/tex/latex/psnfss/upzd.fd
 File: upzd.fd 2001/06/04 font definitions for U/pzd.
 )
-LaTeX Font Info:    Calculating math sizes for size <8.03> on input line 26.
-LaTeX Font Info:    Calculating math sizes for size <9.53561> on input line 59.
-
+<images//basic_landcover.png, id=1, 573.64313pt x 448.67625pt>
+File: images//basic_landcover.png Graphic file (type png)
+<use images//basic_landcover.png>
+Package pdftex.def Info: images//basic_landcover.png  used on input line 59.
+(pdftex.def)             Requested size: 207.17084pt x 162.03679pt.
+<images//basic_landcover_graph.png, id=3, 398.9304pt x 297.0297pt>
+File: images//basic_landcover_graph.png Graphic file (type png)
+<use images//basic_landcover_graph.png>
+Package pdftex.def Info: images//basic_landcover_graph.png  used on input line 
+66.
+(pdftex.def)             Requested size: 207.17084pt x 154.25237pt.
+LaTeX Font Info:    Calculating math sizes for size <8.03> on input line 80.
+LaTeX Font Info:    Calculating math sizes for size <9.53561> on input line 100
+.
  [1{c:/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 
-]
-(./Graph_Based_Approach_to_Unsupervised_Clustering_of_USA_Land_Cover.bbl)
-[2
+] [2 <./images//basic_landcover.png> <./images//basic_landcover_graph.png>]
+<images//landcover.png, id=25, 501.875pt x 501.875pt>
+File: images//landcover.png Graphic file (type png)
+<use images//landcover.png>
+Package pdftex.def Info: images//landcover.png  used on input line 178.
+(pdftex.def)             Requested size: 207.17084pt x 207.17148pt.
+<images//2clusters.png, id=26, 351.56343pt x 351.56343pt>
+File: images//2clusters.png Graphic file (type png)
+<use images//2clusters.png>
+Package pdftex.def Info: images//2clusters.png  used on input line 185.
+(pdftex.def)             Requested size: 207.17084pt x 207.16849pt.
+<images//3clusters.png, id=27, 351.56343pt x 351.56343pt>
+File: images//3clusters.png Graphic file (type png)
+<use images//3clusters.png>
+Package pdftex.def Info: images//3clusters.png  used on input line 192.
+(pdftex.def)             Requested size: 207.17084pt x 207.16849pt.
+<images//4clusters.png, id=28, 351.56343pt x 351.56343pt>
+File: images//4clusters.png Graphic file (type png)
+<use images//4clusters.png>
+Package pdftex.def Info: images//4clusters.png  used on input line 199.
+(pdftex.def)             Requested size: 207.17084pt x 207.16849pt.
 
-] (./Graph_Based_Approach_to_Unsupervised_Clustering_of_USA_Land_Cover.aux) ) 
+(./Graph_Based_Approach_to_Unsupervised_Clustering_of_USA_Land_Cover.bbl)
+[3
+
+] [4 <./images//landcover.png (PNG copy)> <./images//2clusters.png> <./images//
+3clusters.png> <./images//4clusters.png>]
+(./Graph_Based_Approach_to_Unsupervised_Clustering_of_USA_Land_Cover.aux) ) 
 Here is how much of TeX's memory you used:
- 4269 strings out of 478278
- 67341 string characters out of 5850546
- 367011 words of memory out of 5000000
- 22428 multiletter control sequences out of 15000+600000
- 515373 words of font info for 131 fonts, out of 8000000 for 9000
+ 5768 strings out of 478278
+ 97005 string characters out of 5850546
+ 397959 words of memory out of 5000000
+ 23911 multiletter control sequences out of 15000+600000
+ 514897 words of font info for 131 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,6n,62p,830b,325s stack positions out of 5000i,500n,10000p,200000b,80000s
-{c
-:/texlive/2021/texmf-dist/fonts/enc/dvips/base/8r.enc}<c:/texlive/2021/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2021/texmf-dist/fonts/
-type1/urw/helvetic/uhvb8a.pfb><c:/texlive/2021/texmf-dist/fonts/type1/urw/helve
-tic/uhvr8a.pfb><c:/texlive/2021/texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb
-><c:/texlive/2021/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><c:/texlive/20
-21/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb><c:/texlive/2021/texmf-dist/
-fonts/type1/urw/zapfding/uzdr.pfb>
+ 55i,10n,63p,829b,457s stack positions out of 5000i,500n,10000p,200000b,80000s
+{c:/
+texlive/2021/texmf-dist/fonts/enc/dvips/base/8r.enc}<c:/texlive/2021/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2021/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr8.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmsy7.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pf
+b><c:/texlive/2021/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb><c:/texlive/2
+021/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/texlive/2021/texmf-dist/
+fonts/type1/urw/helvetic/uhvro8a.pfb><c:/texlive/2021/texmf-dist/fonts/type1/ur
+w/palatino/uplb8a.pfb><c:/texlive/2021/texmf-dist/fonts/type1/urw/palatino/uplr
+8a.pfb><c:/texlive/2021/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb><c:/tex
+live/2021/texmf-dist/fonts/type1/urw/zapfding/uzdr.pfb>
 Output written on Graph_Based_Approach_to_Unsupervised_Clustering_of_USA_Land_C
-over.pdf (2 pages, 82695 bytes).
+over.pdf (4 pages, 385315 bytes).
 PDF statistics:
- 47 PDF objects out of 1000 (max. 8388607)
- 28 compressed objects within 1 object stream
+ 90 PDF objects out of 1000 (max. 8388607)
+ 48 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
