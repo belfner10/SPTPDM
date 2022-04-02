@@ -32,7 +32,7 @@ def create_transform(layer):
 
 def gdal_translate_window(input_image_path, output_image_path, bounding_box):
     print(' '.join(['gdal_translate', input_image_path, output_image_path, '-projwin'] + bounding_box))
-    subprocess.call(['gdal_translate', input_image_path, output_image_path, '-projwin'] + bounding_box, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+    subprocess.check_call(['gdal_translate', input_image_path, output_image_path, '-projwin'] + bounding_box, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 
 
 prefix = 'C:/Users/benel/Documents/Test2/'
@@ -42,7 +42,7 @@ def process_county(data):
     state, county_name, bbox = data
     if not os.path.exists(f'{prefix}States/{state}/{county_name}'):
         os.makedirs(f'{prefix}States/{state}/{county_name}')
-    subprocess.call(['gdal_translate', f'{prefix}States/land_cover_data/nlcd_2019_land_cover_l48_20210604.tif', f'{prefix}States/{state}/{county_name}/{county_name}.tif', '-projwin'] + bbox, stdout=subprocess.DEVNULL,
+    subprocess.check_call(['gdal_translate', f'{prefix}States/land_cover_data/nlcd_2019_land_cover_l48_20210604.tif', f'{prefix}States/{state}/{county_name}/{county_name}.tif', '-projwin'] + bbox, stdout=subprocess.DEVNULL,
                     stderr=subprocess.STDOUT)
 
     render_file(f'{prefix}States/{state}/{county_name}/{county_name}.tif', f'{prefix}States/{state}/{county_name}/{county_name}.png')
