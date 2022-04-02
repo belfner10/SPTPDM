@@ -7,7 +7,7 @@ import multiprocessing as mp
 import gzip
 from PIL import Image
 
-raster = r'M:\Spatial_Temporal_Mining\Project\src\createdata\land_cover_data\nlcd_2019_land_cover_l48_20210604.tif'
+raster = r'createdata/land_cover_data/nlcd_2019_land_cover_l48_20210604.tif'
 save_folder = 'data'
 
 xmin = -2493045

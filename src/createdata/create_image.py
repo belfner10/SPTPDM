@@ -5,6 +5,8 @@ import numpy as np
 from PIL import Image
 from osgeo import gdal
 
+from src.segmenter.funcs import adv_simplify
+
 
 def get_raster_as_arr(file_path: str):
     raster = gdal.Open(file_path, gdal.GA_ReadOnly)
@@ -35,7 +37,7 @@ def get_grey_color_map(file_path: str):
 
 
 def get_color_maps(file_path: str):
-    tree = ET.parse(f'{file_path}.aux.xml')
+    tree = ET.parse(f'createdata/land_cover_data/nlcd_2019_land_cover_l48_20210604.tif.aux.xml')
     root = tree.getroot()
     items = root.findall('PAMRasterBand/GDALRasterAttributeTable/Row')
 
@@ -83,8 +85,6 @@ def map_colors(img_arr, color_maps):
 def render_file(file_path: str, save_path: str) -> None:
     if not os.path.exists(file_path):
         raise FileNotFoundError(f'{file_path} not found')
-    if not os.path.exists(file_path + '.aux.xml'):
-        raise FileNotFoundError(f'{file_path}.aux.xml not found')
 
     img_arr = get_raster_as_arr(file_path)
     img_arr = adv_simplify(img_arr, 3)
