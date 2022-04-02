@@ -87,6 +87,7 @@ def render_file(file_path: str, save_path: str) -> None:
         raise FileNotFoundError(f'{file_path}.aux.xml not found')
 
     img_arr = get_raster_as_arr(file_path)
+    img_arr = adv_simplify(img_arr, 3)
     if not np.any(img_arr):
         return
     color_maps = get_color_maps(file_path)
@@ -108,6 +109,28 @@ def render_grey_file(file_path: str, save_path: str) -> None:
     img_arr2 = map_grey_colors(img_arr, color_map)
 
     img = Image.fromarray(img_arr2)
+    img.save(save_path)
+
+
+def render_simplified(arr, save_path: str):
+    color_map = {0: (0, 0, 0), 1: (84, 117, 168), 2: (181, 0, 0), 3: (210, 205, 192), 4: (56, 129, 78),
+                 5: (175, 150, 60), 7: (253, 233, 170), 8: (251, 246, 93), 9: (100, 179, 213)}
+    r_lookup = {x: y[0] for x, y in color_map.items()}
+    g_lookup = {x: y[1] for x, y in color_map.items()}
+    b_lookup = {x: y[2] for x, y in color_map.items()}
+
+    r_l = lambda x: r_lookup[x]
+    g_l = lambda x: g_lookup[x]
+    b_l = lambda x: b_lookup[x]
+
+    img_arr = arr.astype(np.uint8)
+    img_r = np.vectorize(r_l)(img_arr)
+    # print('R done')
+    img_g = np.vectorize(g_l)(img_arr)
+    # print('G done')
+    img_b = np.vectorize(b_l)(img_arr)
+    img = np.stack((img_r, img_g, img_b), axis=2).astype(np.uint8)
+    img = Image.fromarray(img)
     img.save(save_path)
 
 
