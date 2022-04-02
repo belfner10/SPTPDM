@@ -1,0 +1,20 @@
+name: TSProject
+channels:
+  - defaults
+dependencies:
+  - gdal
+  - scikit-learn
+  - pillow
+  - opencv
+  - networkx
+  - fiona
+  - scikit-image
+  - python=3.7
+  - graphviz
+  - tqdm
+  - rasterio
+  - pandas
+  - scipy
+  - graphvite
+  - matplotlib
+prefix: /home/belfner/anaconda3/envs/TSProject
