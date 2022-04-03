@@ -37,7 +37,7 @@ def get_grey_color_map(file_path: str):
 
 
 def get_color_maps(file_path: str):
-    tree = ET.parse(f'createdata/land_cover_data/nlcd_2019_land_cover_l48_20210604.tif.aux.xml')
+    tree = ET.parse(f'{file_path}.aux.xml')
     root = tree.getroot()
     items = root.findall('PAMRasterBand/GDALRasterAttributeTable/Row')
 
@@ -82,13 +82,17 @@ def map_colors(img_arr, color_maps):
     return img
 
 
-def render_file(file_path: str, save_path: str) -> None:
+def render_file(file_path: str, save_path: str, do_simp=False, min_size=10) -> None:
     if not os.path.exists(file_path):
         raise FileNotFoundError(f'{file_path} not found')
+    if not os.path.exists(file_path + '.aux.xml'):
+        raise FileNotFoundError(f'{file_path}.aux.xml not found')
 
     img_arr = get_raster_as_arr(file_path)
-    img_arr = adv_simplify(img_arr, 3)
+    if do_simp:
+        img_arr = adv_simplify(img_arr, min_size)
     if not np.any(img_arr):
+        print('Image is all black. Not saving.')
         return
     color_maps = get_color_maps(file_path)
     img_arr2 = map_colors(img_arr, color_maps)
