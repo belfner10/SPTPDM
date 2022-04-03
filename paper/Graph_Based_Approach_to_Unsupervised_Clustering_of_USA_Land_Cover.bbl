@@ -37,19 +37,23 @@ J.~Niesterowicz, T.~Stepinski, and J.~Jasiewicz, ``Unsupervised regionalization
   \url{https://www.mrlc.gov/data/nlcd-2019-land-cover-conus}
 \BIBentrySTDinterwordspacing
 
+\bibitem{zhang2018network}
+D.~Zhang, J.~Yin, X.~Zhu, and C.~Zhang, ``Network representation learning: A
+  survey,'' 2018.
+
 \bibitem{SalhaGalvan2019KeepIS}
 G.~Salha-Galvan, R.~Hennequin, and M.~Vazirgiannis, ``Keep it simple: Graph
   autoencoders without graph convolutional networks,'' \emph{ArXiv}, vol.
   abs/1910.00942, 2019.
 
-\bibitem{Cao2015GraRepLG}
-S.~Cao, W.~Lu, and Q.~Xu, ``Grarep: Learning graph representations with global
-  structural information,'' \emph{Proceedings of the 24th ACM International on
-  Conference on Information and Knowledge Management}, 2015.
-
 \bibitem{Tang2015LINELI}
 J.~Tang, M.~Qu, M.~Wang, M.~Zhang, J.~Yan, and Q.~Mei, ``Line: Large-scale
   information network embedding,'' \emph{Proceedings of the 24th International
   Conference on World Wide Web}, 2015.
+
+\bibitem{Cao2015GraRepLG}
+S.~Cao, W.~Lu, and Q.~Xu, ``Grarep: Learning graph representations with global
+  structural information,'' \emph{Proceedings of the 24th ACM International on
+  Conference on Information and Knowledge Management}, 2015.
 
 \end{thebibliography}

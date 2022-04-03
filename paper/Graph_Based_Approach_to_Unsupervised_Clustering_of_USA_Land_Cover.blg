@@ -1,6 +1,6 @@
-This is BibTeX, Version 0.99d (TeX Live 2021/W32TeX)
+This is BibTeX, Version 0.99d (TeX Live 2020/Debian)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
-The top-level auxiliary file: projectproposal.aux
+The top-level auxiliary file: Graph_Based_Approach_to_Unsupervised_Clustering_of_USA_Land_Cover.aux
 The style file: IEEEtran.bst
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
@@ -13,44 +13,44 @@ Database file #1: ./references.bib
 -- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
 
 Done.
-You've used 5 entries,
+You've used 6 entries,
             4087 wiz_defined-function locations,
-            852 strings with 8447 characters,
-and the built_in function-call counts, 2856 in all, are:
-= -- 219
-> -- 74
+            856 strings with 8667 characters,
+and the built_in function-call counts, 3296 in all, are:
+= -- 247
+> -- 91
 < -- 13
-+ -- 39
-- -- 15
-* -- 148
-:= -- 477
-add.period$ -- 9
-call.type$ -- 5
-change.case$ -- 5
++ -- 47
+- -- 19
+* -- 165
+:= -- 542
+add.period$ -- 11
+call.type$ -- 6
+change.case$ -- 6
 chr.to.int$ -- 27
-cite$ -- 5
-duplicate$ -- 215
-empty$ -- 225
-format.name$ -- 19
-if$ -- 630
+cite$ -- 6
+duplicate$ -- 252
+empty$ -- 267
+format.name$ -- 24
+if$ -- 730
 int.to.chr$ -- 0
-int.to.str$ -- 5
-missing$ -- 41
-newline$ -- 42
-num.names$ -- 4
-pop$ -- 107
+int.to.str$ -- 6
+missing$ -- 51
+newline$ -- 45
+num.names$ -- 5
+pop$ -- 138
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 212
+skip$ -- 245
 stack$ -- 0
-substring$ -- 67
-swap$ -- 153
+substring$ -- 68
+swap$ -- 175
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 5
-type$ -- 5
+type$ -- 6
 warning$ -- 0
-while$ -- 7
-width$ -- 6
-write$ -- 70
+while$ -- 8
+width$ -- 7
+write$ -- 77
