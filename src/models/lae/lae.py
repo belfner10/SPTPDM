@@ -47,7 +47,7 @@ def normalize_sparse_adj(adj):
     return adj_normalized
 
 
-def lae(adj_norm, adj, num_epochs, learning_rate=.001, components=10, threshold=.0001):
+def lae(adj_norm, adj, num_epochs, learning_rate=.001, components=10, threshold=.0001) -> np.ndarray:
     adj_norm_tensor = tf.SparseTensor(*sparse_to_tuple(adj_norm.astype('float32')))
     adj_tensor = tf.sparse.to_dense(tf.SparseTensor(*sparse_to_tuple(adj.astype('float32'))))
 
@@ -94,7 +94,8 @@ def lae(adj_norm, adj, num_epochs, learning_rate=.001, components=10, threshold=
     return weights
 
 
-def get_lae_weights(adj, num_epochs=100, learning_rate=.1, n_components=10, threshold=.0001):
+def get_lae_comps(adj: np.ndarray, num_epochs: int = 100, learning_rate: float = .1, n_components: int = 10,
+                  threshold: float = .0001) -> np.ndarray:
     if not isinstance(adj, sp.csr_matrix):
         adj = sp.csr_matrix(adj)
     adj_norm = normalize_sparse_adj(adj)
