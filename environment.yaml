@@ -1,20 +1,14 @@
-name: TSProject
+name: TSProject4
 channels:
-  - defaults
+  - conda-forge
 dependencies:
   - gdal
   - scikit-learn
   - pillow
   - opencv
   - networkx
-  - fiona
   - scikit-image
   - python=3.7
-  - graphviz
   - tqdm
-  - rasterio
-  - pandas
   - scipy
-  - graphvite
-  - matplotlib
-prefix: /home/belfner/anaconda3/envs/TSProject
+  - tensorflow-gpu
