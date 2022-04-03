@@ -5,8 +5,7 @@ from sklearn.decomposition import TruncatedSVD
 from sklearn.preprocessing import normalize
 import tqdm
 from time import perf_counter
-# seed = 42435
-# np.random.seed(seed)
+
 import multiprocessing as mp
 
 
@@ -80,7 +79,9 @@ def get_comps(aks, n_components=2):
     return components
 
 
-def get_grarep_comps(adj, k, lambda_v=1, n_components=4):
+def get_grarep_comps(adj: np.ndarray, k: int,
+                     lambda_v: float = 1, n_components: int = 4,
+                     n_iter: int = 50, random_seed: int = None) -> np.ndarray:
     norm = normalize(adj, 'l1', axis=1)
     ak = norm.copy()
     components = []
@@ -92,7 +93,7 @@ def get_grarep_comps(adj, k, lambda_v=1, n_components=4):
         yk.row = yk.row[yk.data > 0]
         yk.data = yk.data[yk.data > 0]
         yk = sp.csr_matrix(yk)
-        svd = TruncatedSVD(n_components=n_components, n_iter=30)
+        svd = TruncatedSVD(n_components=n_components, n_iter=n_iter, random_state=random_seed)
         components.append(svd.fit_transform(yk))
         if x != n_components - 1:
             ak = ak.dot(norm)
@@ -101,22 +102,22 @@ def get_grarep_comps(adj, k, lambda_v=1, n_components=4):
     return components
 
 
+# TODO Check if can be removed
 def get_components(ak, lambda_v, n_components=2, n_iter=5, rseed=None):
     ak = sp.coo_matrix(ak)
     ak.data = np.log(ak.data) - np.log(lambda_v / ak.shape[0])
     ak.col = ak.col[ak.data > 0]
-    # ak.col = np.array([cind for cind, val in zip(ak.col, ak.data) if val > 0], dtype=ak.col.dtype)
     ak.row = ak.row[ak.data > 0]
-    # ak.row = np.array([rind for rind, val in zip(ak.row, ak.data) if val > 0], dtype=ak.row.dtype)
-    # ak.data = np.array([val for val in ak.data if val > 0], dtype=ak.data.dtype)
     ak.data = ak.data[ak.data > 0]
     ak = sp.csr_matrix(ak)
+
     print(f'NNz: {ak.nnz}')
     svd = TruncatedSVD(n_components=n_components, random_state=rseed, algorithm='arpack')
     comp = svd.fit_transform(ak)
     return comp
 
 
+# TODO Check if can be removed
 def get_k_components(adj, k, lambda_v, n_components=5, n_iter=20, rseed=None):
     norm = normalize(adj, 'l1', axis=1)
     ak = norm.copy()
