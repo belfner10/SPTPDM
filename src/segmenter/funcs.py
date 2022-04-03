@@ -39,6 +39,14 @@ def get_surrounding(arr, coords):
     return c.most_common(1)[0][0]
 
 
+def get_all_surrounding(arr, coords):
+    coord_set = set([(c[0], c[1]) for c in coords])
+    neighbors = get_neighbor_coords(arr, coord_set)
+    labels = get_coord_labels(arr, neighbors)
+    labels = set(labels)
+    return labels
+
+
 def adv_simplify(arr, threshold=4):
     ret = arr.copy()
     labeled, num_regions = label(arr, return_num=True)
@@ -50,6 +58,17 @@ def adv_simplify(arr, threshold=4):
                 y, x = coord[0], coord[1]
                 ret[y, x] = l
     return ret
+
+
+def get_border_counts(labeled):
+    props = regionprops(labeled)
+    counts = []
+    areas = []
+    for x, prop in enumerate(props):
+        l = get_all_surrounding(labeled, prop['coords'])
+        counts.append(len(l))
+        areas.append(prop['area'])
+    return counts, areas
 
 def window(image: np.ndarray, y: int, x: int, value: int) -> (bool, list):
     """
@@ -164,7 +183,8 @@ def simplify_image(image: np.ndarray, method: str) -> np.ndarray:
     return simplified_image
 
 
-def create_dict_adj(image: np.ndarray, labeled_image: np.ndarray, norm_weights: bool = True, ignore_labels=None) -> (dict, defaultdict):
+def create_dict_adj(image: np.ndarray, labeled_image: np.ndarray, norm_weights: bool = True, ignore_labels=None) -> (
+dict, defaultdict):
     """
     Creates adjacency matrix in the form of dictionary
     Parameters
@@ -217,7 +237,8 @@ def create_dict_adj(image: np.ndarray, labeled_image: np.ndarray, norm_weights: 
     return label_classes, weights
 
 
-def create_np_adj(image: np.ndarray, labeled_image: np.ndarray, num_labels: int, norm_weights: bool = False) -> (dict, np.array):
+def create_np_adj(image: np.ndarray, labeled_image: np.ndarray, num_labels: int, norm_weights: bool = False) -> (
+dict, np.array):
     """
     Creates adjacency matrix in the form of numpy array
     Parameters
@@ -263,7 +284,8 @@ def create_np_adj(image: np.ndarray, labeled_image: np.ndarray, num_labels: int,
     return label_classes, weights
 
 
-def create_sp_adj(image: np.ndarray, labeled_image: np.ndarray, num_labels: int, norm_weights: bool = False) -> (dict, np.array):
+def create_sp_adj(image: np.ndarray, labeled_image: np.ndarray, num_labels: int, norm_weights: bool = False) -> (
+dict, np.array):
     """
     Creates adjacency matrix in the form of numpy array
     Parameters
@@ -328,10 +350,14 @@ def draw_regions(image, regions: np.ndarray) -> np.ndarray:
         for x in range(width):
             if y != heigth - 1:
                 if regions[y, x] != regions[y + 1, x]:
-                    cv2.rectangle(drawing_image, (x * scale_factor - 1, (y + 1) * scale_factor - 1 - thickness), (x * scale_factor + scale_factor - 1, (y + 1) * scale_factor - 1 + thickness), 255, -1)
+                    cv2.rectangle(drawing_image, (x * scale_factor - 1, (y + 1) * scale_factor - 1 - thickness),
+                                  (x * scale_factor + scale_factor - 1, (y + 1) * scale_factor - 1 + thickness), 255,
+                                  -1)
             if x != width - 1:
                 if regions[y, x] != regions[y, x + 1]:
-                    cv2.rectangle(drawing_image, ((x + 1) * scale_factor - 1 - thickness, y * scale_factor - 1), ((x + 1) * scale_factor - 1 + thickness, y * scale_factor + scale_factor - 1), 255, -1)
+                    cv2.rectangle(drawing_image, ((x + 1) * scale_factor - 1 - thickness, y * scale_factor - 1),
+                                  ((x + 1) * scale_factor - 1 + thickness, y * scale_factor + scale_factor - 1), 255,
+                                  -1)
     return drawing_image
 
 
