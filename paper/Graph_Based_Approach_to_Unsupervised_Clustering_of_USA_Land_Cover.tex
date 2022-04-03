@@ -27,7 +27,7 @@
 	\maketitle
 	
 	\begin{abstract}
-		We present a method to create a clustering of land cover using planar graphs. Doing so transforms the problem into a vertex clustering one. This new representation is created using adjacent segments of land cover classes. Network representation techniques are then used to create component vectors for each node of the graph. These node representations are then clustered using standard clustering algorithms such as k-means or hierarchical to create regions with similar land patterns.
+		We present a method to create a clustering of land cover using planar graphs. Doing so transforms the problem into a vertex clustering one. This new representation is created using adjacent patches of land cover classes. Network representation techniques are then used to create component vectors for each node of the graph. These node representations are then clustered using standard clustering algorithms such as k-means or hierarchical to create regions with similar land patterns.
 	\end{abstract}
 	
 	\begin{IEEEkeywords}
@@ -46,11 +46,11 @@
 	20 land cover classes describe the contents of the land cover for each square and are grouped into 8 superclasses. \cite{NLCD2019LandCover}
 	
 	\section{Related Works}
-	Previously this problem was approached using the formation of motifels, small tiling subsections of the land cover data \cite{doi:10.1080/13658816.2015.1134796}. A co-occurrence histogram was created for each motifel where pixel adjacency are categorized and counted. These histograms can be compared to calculate a distance score for two motifels. Through a greedy algorithm, segments of contiguous motifel are grown until all surrounding motifels are no longer within a threshold distance of the motifel. Those segments are then clustered using hierarchical clustering. The benefit of this approach is reduced computational complexity since the data can be split into sections larger than a single pixel. The downside to this approach is the measure of similarity only considers the connections between two pixels and ignores larger patterns found in the data.
+	Previously this problem was approached using the formation of motifels, small tiling subsections of the land cover data \cite{doi:10.1080/13658816.2015.1134796}. A co-occurrence histogram was created for each motifel where pixel adjacency are categorized and counted. These histograms can be compared to calculate a distance score for two motifels. Through a greedy algorithm, patches of contiguous motifel are grown until all surrounding motifels are no longer within a threshold distance of the motifel. Those patches are then clustered using hierarchical clustering. The benefit of this approach is reduced computational complexity since the data can be split into sections larger than a single pixel. The downside to this approach is the measure of similarity only considers the connections between two pixels and ignores larger patterns found in the data.
 	
 	
 	\section{Our Approach}
-	We will approach this problem by viewing land cover data as a planar graph. Each contiguous segment of land cover that shares a common class will represent the vertices and the edges are between adjacent segments. A possible modification of this method is to give a weight to each edge corresponding to the length of the shared perimeter. An example of this operation is shown in Fig. \ref{BasicTransform}. There are options to consider when creating graphs such as whether the graph should be weighted or unweighted as well as what if any prepossessing should be performed on the data.
+	We will approach this problem by viewing land cover data as a planar graph. Each contiguous patch of land cover that shares a common class will represent the vertices and the edges are between adjacent patches. A possible modification of this method is to give a weight to each edge corresponding to the length of the shared perimeter. An example of this operation is shown in Fig. \ref{BasicTransform}. There are options to consider when creating graphs such as whether the graph should be weighted or unweighted as well as what if any prepossessing should be performed on the data.
 	
 	\begin{figure}[t]
 		\centering
@@ -105,37 +105,92 @@
 	\section{Understanding Limitations of Approach}
 	Clustering land cover patches has several inherit issues. First, the algorithms used to cluster the nodes are unaware of the class labels for each. This means when comparing the two nodes, the only information available is the nodes connections to other nodes. This leads to issues where two patches of the same class that could be considered part of the same pattern if their class is taken into account but because the structure of the surrounding nodes is not quite similar enough for the algorithms to come to the same conclusion.
 	
-	
-	Another issue is the variance in the sizes of patches. As seen in Figure \ref{size_distribution_example}, the range of patch sizes is very large and the distribution is heavily skewed towards the smaller patches. The size calculations do not take into account any portion of the patches that are clipped by the image so the actual max patch size is larger than stated. Having a disproportionate mix of very large and very small areas causes issues for both.
-	
-	Large areas cause distant areas to be only a few steps away. This causes any algorithm analyzing the structure of the graph to assume that all areas connected to a large area to be closely related to each other. Another issue is the algorithms are only able to assign each patch to 1 region. For small regions this is not a problem since the difference of placing a border patch in one region or another has little effect on the overall structure of the regions, but for large regions it is unreasonable to assume they fit that neatly into the categories due to there size (EVIDENCE NEEDED).
-	
-	Small patches have the opposite issue to the first of the large patches. Small patches could be spatially close to each other but if they are in a dense region of many small patches the path between the two patches on the graph could be many steps. This disparity between the large and small regions makes it difficult to come up with a simple solution that addresses both issues.
-	
 	\begin{figure*}[t!]
 		\centering
-		\begin{subfigure}[b]{0.4\textwidth}
+		\begin{subfigure}[b]{0.29\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{size_dist_landcover}
 			\caption{Sample Land Cover}
 			\label{simple_land_cover}
 		\end{subfigure}
 		\hfill
-		\begin{subfigure}[b]{0.45\textwidth}
+		\begin{subfigure}[b]{0.32\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{size_dist}
 			\caption{Size Distribution}
 			\label{size_distribution}
 		\end{subfigure}
-		\begin{subfigure}[b]{0.45\textwidth}
+		\begin{subfigure}[b]{0.33\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{degree_dist}
 			\caption{Degree vs Area}
 			\label{degree_vs_area}
 		\end{subfigure}
-		\caption{This figure shows the distribution of patch sizes as well as the relationship between area and degree of the patches from a random section of landcover. In \ref{size_distribution} this example 80\% of the patches have an area of 9 pixels or less while the range of sizes is 1 to 52686 pixels.}
+		\caption{This figure shows the distribution of patch sizes as well as the relationship between area and degree of the patches from a random section of landcover. In this example 80\% of the patches have an area of 12 pixels or less while the range of sizes is 1 to 396620 pixels.}
 		\label{size_distribution_example}
 	\end{figure*}
+	
+	Another issue is the variance in the sizes of patches. As seen in Fig. \ref{size_distribution_example}, the range of patch sizes is very large and the distribution is heavily skewed towards the smaller patches. The size calculations do not take into account any portion of the patches that are clipped by the image so the actual max patch size is larger than stated. Having a disproportionate mix of very large and very small areas causes issues for both.
+	
+	\begin{figure*}[t!]
+		\centering
+		\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{large_section}
+			\caption{Example Landcover}
+			\label{large_section}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{large_section_filled}
+			\caption{Black region is a large single patch}
+			\label{large_section_filled}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{large_section_split}
+			\caption{Black region split into 11 400x400 pixel patches}
+			\label{large_section_split}
+		\end{subfigure}
+		
+		\caption{This figure shows the dificulty when dealing with large patches. The patch highlighted in black is adjacent to many different patches but when creating regions it is only able to become part of one created region. \ref{large_section_split} shows a possible outcome of spliting the large patch into smaller ones.}
+		\label{large_patch_example}
+	\end{figure*}
+	
+	Large areas cause distant areas to be only a few steps away. This causes any algorithm analyzing the structure of the graph to assume that all areas connected to a large area to be closely related to each other. Another issue is the algorithms are only able to assign each patch to 1 region. In the real world there is no constraint to the way arbitrary regions can be formed but the method used in this paper assumes extra constraints on the formation of regions reducing the flexibility of the method. Fig. \ref{large_patch_example} shows an example where a large patch is adjacent to many spatially distant regions. 
+	
+	\begin{figure*}[t!]
+		\centering
+		\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{small_sections}
+			\caption{Example Landcover}
+			\label{small_sections}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{simp_merge_small_sections}
+			\caption{Demonstration of reduction by merging}
+			\label{simp_merge_small_sections}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{simp_super_small_sections}
+			\caption{Demonstration of reduction to supercategories}
+			\label{simp_super_small_sections}
+		\end{subfigure}
+		
+		\caption{This figure shows the difficulty when dealing with small patches. The patches outside of the cluster near the bottom of \ref{small_sections} can be several steps away from each other. The patches in the cluster can also be several steps away from patches within the same cluster even though they are spatially close due to the density of the cluster. This shows that the length of the path between two patches is not a rigid tool to use when comparing the similarity between the two patches. Figs. \ref{simp_merge_small_sections} and \ref{simp_super_small_sections} demonstrate reduction methods.}
+		\label{small_patch_example}
+	\end{figure*}
+	
+	Small patches have the opposite issue to the first of the large patches. Small patches could be spatially close to each other but if they are in a dense region of many small patches the path between the two patches on the graph could be many steps. This effect is demonstrated in Fig. \ref{small_patch_example}. The disparity between the large and small regions makes it difficult to come up with a simple solution that addresses both issues.
+	
+	
 	
 	\subsection{Posible Solutions}
 	There are several possible solutions to these issues but they all have strengths and weaknesses. 
@@ -146,17 +201,18 @@
 			\item Append one-hot encoding data to component data found by algorithms. This provides the node label information to the clustering algorithms but it can also encourage the algorithm to wrongly assume distant patches are more related only because they are of the same class. There are also the issue of how to weight the class data compared to the component data found by the graph encoding algorithms.
 		\end{itemize}		
 		
-		
 		\item Large Patches
 		\begin{itemize}
-			\item Split large regions into smaller areas. This prevent spatially distant patches from being only a few hops away and allows them to be part of different regions but how they should be split is ambiguous and can introduce artifacts into the data (EVIDENCE NEEDED). Things to consider when splitting patches is the shape and size of the formed subpatches as well as there distribution.
-			\item Drop large regions. This prevents the shortest path between spatially distant patches from traversing through the large patches but this can can introduce artifacts into the data (EVIDENCE NEEDED) as well as creating disjoint graphs.
+			\item Split large regions into smaller areas. This prevent spatially distant patches from being only a few hops away and allows them to be part of different regions but how they should be split is ambiguous and can introduce artifacts into the data. Things to consider when splitting patches is the shape and size of the formed subpatches as well as there distribution. Fig. \ref{large_section_split} shows the outcome of spliting the black patch from Fig. \ref{large_section_filled} into patches of size 400 x 400. Eleven new patches were formed but they are not equal in size and their layout is not dependent on any structure present in the land cover. 
+			\item Drop large regions. This prevents the shortest path between spatially distant patches from traversing through the large patches but this can introduce artifacts into the data as well as creating disjoint graphs. In Fig. \ref{large_section} it can be seen that removing the river (the blue patch running from the bottom to top) would split the graph created into a disconnected left and right section. 
 		\end{itemize}
+	
 		\item Small Patches
 		\begin{itemize}
-			\item Merge smaller patches into larger groups. This reduces the spatial density of areas with many small patches allowing the new patches to be closer to surrounding patches on the graph but information is destroyed in the process. Also selecting which patches to be merged, how patches should be merged, and what their new class label should be has many different approaches each with there own consequences (EVIDENCE NEEDED). Some examples of merging rules is all patches with an area less than 4 pixels are merged into the neighbor they share the most perimeter with and the new patch retains the class label of the larger region. 
-			\item Simplify patch labels to only reference super categories. Provided with the land cover data is a categorization of the present classes. The land cover patches present in a landcover sample can be reduced to their supercategory and merged with neighboring patches of the same supercategory. This reduces the number of small patches as some will be nearby patches of the same supercategory but this has consequences such as with roads which by their connected nature usually merge with all other road patches on the sample which can connect very distant patches to each other (EVIDENCE NEEDED).
+			\item Merge smaller patches into larger groups. This reduces the spatial density of areas with many small patches allowing the new patches to be closer to surrounding patches on the graph but information is destroyed in the process. Also selecting which patches to be merged, how patches should be merged, and what their new class label should be has many different approaches each with there own consequences. Fig. \ref{simp_merge_small_sections} shows an example of merging using the rule: all patches with an area less than 5 pixels are merged into the neighbor they share the most perimeter with and the new patch retains the class label of the larger region. As shown, performing this action reduces the density of the small cluster near the bottom but now some of the road has been merged into the surrounding patches causing some of those patches to merge with each other.
+			\item Simplify patch labels to only reference super categories. Provided with the land cover data is a categorization of the present classes. The land cover patches present in a landcover sample can be reduced to their supercategory and merged with neighboring patches of the same supercategory. This reduces the number of small patches as some will be nearby patches of the same supercategory but this has consequences such as with roads which by their connected nature usually merge with all other road patches on the sample which can connect very distant patches to each other. Fig. \ref{simp_super_small_sections} shows an example of reducing the patch labels to their supercategory. The cluster has become mostly a single patch and but it now includes most roads in the example. 
 		\end{itemize}
+	
 	\end{itemize}	
 	
 	\section{Proposed Research}
@@ -186,7 +242,7 @@
 	Example Result of Pipeline
 	\begin{itemize}
 		\item Input image: 30x30 km region near New Orleans, LA
-		\item Number of segments: 8096
+		\item Number of patches: 8096
 		\item Network Representation Method used: GraRep
 		\item GraRep Arguments:
 		\begin{itemize}

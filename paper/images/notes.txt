@@ -1,0 +1,3 @@
+small_sections/simp_small_sections: -60845,2186521 300,300
+large_section/large_section_filled: -1148176,2077015 1600,1600
+size_dist/degree_dist/size_dist_landcover:-1937792,2037729 1500,1500
