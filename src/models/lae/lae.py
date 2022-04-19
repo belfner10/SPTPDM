@@ -38,16 +38,14 @@ def actual_normalize(adj):
 
 def normalize_sparse_adj(adj):
     adj_ = adj + sp.eye(adj.shape[0])
-    counts = []
-    for i in range(adj.shape[0]):
-        _, cols = adj_[i, :].nonzero()
-        counts.append(len(cols))
-    D = sp.diags(np.array(counts).astype('float32') ** -0.5)
+    counts = np.array(adj_.sum(axis=0))[0] ** -0.5
+    D = sp.diags(counts.astype('float32'))
     adj_normalized = D.dot(adj_).dot(D)
     return adj_normalized
 
 
-def lae(adj_norm, adj, num_epochs, learning_rate=.001, components=10, threshold=.0001) -> np.ndarray:
+def lae(adj_norm, adj, num_epochs, learning_rate=.001, components=10, threshold=.00001) -> np.ndarray:
+    loss_vals = [sys.maxsize]
     adj_norm_tensor = tf.SparseTensor(*sparse_to_tuple(adj_norm.astype('float32')))
     adj_tensor = tf.sparse.to_dense(tf.SparseTensor(*sparse_to_tuple(adj.astype('float32'))))
 
@@ -73,7 +71,6 @@ def lae(adj_norm, adj, num_epochs, learning_rate=.001, components=10, threshold=
     with tf.compat.v1.name_scope('performance'):
         summary = tf.compat.v1.summary.scalar('loss', loss)
 
-    p_loss = sys.maxsize
     for epoch in range(num_epochs):
         outs = sess.run([opt_op])
         loss_val = sess.run(loss)
@@ -85,17 +82,18 @@ def lae(adj_norm, adj, num_epochs, learning_rate=.001, components=10, threshold=
         if epoch % 10 == 0:
             print(f'Epoch: {str(epoch).rjust(len(str(num_epochs - 1)))}, Loss: {loss_val:0.4f} ')
 
-        if abs(p_loss - loss_val) < threshold:
+        loss_vals.append(loss_val)
+
+        if len(loss_vals) > 3 and abs(loss_vals[-3] - loss_vals[-2]) >= threshold and abs(loss_vals[-2] - loss_vals[-1]) < threshold:
             break
 
-        p_loss = loss_val
 
     weights = weight_tensor.eval(session=sess)
     return weights
 
 
-def get_lae_comps(adj: np.ndarray, num_epochs: int = 100, learning_rate: float = .1, n_components: int = 10,
-                  threshold: float = .0001) -> np.ndarray:
+def get_lae_comps(adj: np.ndarray, num_epochs: int = 500, learning_rate: float = .1, n_components: int = 10,
+                  threshold: float = .00001) -> np.ndarray:
     if not isinstance(adj, sp.csr_matrix):
         adj = sp.csr_matrix(adj)
     adj_norm = normalize_sparse_adj(adj)
