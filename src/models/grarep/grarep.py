@@ -79,14 +79,14 @@ def get_comps(aks, n_components=2):
     return components
 
 
-def get_grarep_comps(adj: np.ndarray, k: int,
+def get_grarep_comps(adj, k: int,
                      lambda_v: float = 1, n_components: int = 4,
                      n_iter: int = 50, random_seed: int = None) -> np.ndarray:
-    norm = normalize(adj, 'l1', axis=1)
+    norm = normalize(adj, 'l1')
     ak = norm.copy()
     components = []
     for x in tqdm.tqdm(range(k)):
-        yk = normalize(ak, 'l1', axis=0)
+        yk = normalize(ak.T, 'l1').T
         yk = sp.coo_matrix(yk)
         yk.data = np.log(yk.data) - np.log(lambda_v / yk.shape[0])
         yk.col = yk.col[yk.data > 0]
@@ -97,8 +97,8 @@ def get_grarep_comps(adj: np.ndarray, k: int,
         components.append(svd.fit_transform(yk))
         if x != n_components - 1:
             ak = ak.dot(norm)
-
     components = np.hstack(components)
+    components = normalize(components, 'l2')
     return components
 
 
@@ -133,13 +133,21 @@ def get_k_components(adj, k, lambda_v, n_components=5, n_iter=20, rseed=None):
 
 
 if __name__ == '__main__':
-    # size = 20
-    # adj = sp.csr_matrix(random_adj_sp(size, .35))
-    adj = sp.load_npz('adj_86105.npz')
+    size = 6
+    S = random_adj_sp(size, .35)
+    print(S)
+    D = np.diag([1 / float(x) for x in np.sum(S, axis=0)])
+    adj = np.matmul(D,S)
+    print(adj)
+
+    print(normalize(S.T,'l1').T)
+
+
+    # adj = sp.load_npz('data/adj_86105.npz')
     # lambda_v = 1
     # out = get_k_components(adj, 5, lambda_v, n_components=4)
     s = perf_counter()
 
-    get_grarep_comps(adj, n_components=5)
+    print(get_grarep_comps(S, k=2,lambda_v=1))
     print(perf_counter() - s)
-    # np.save('out', out)
+    # np.1('out', out)
