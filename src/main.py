@@ -1,7 +1,11 @@
+import sys
+
+sys.path.append("..")
+
 import os
 import sys
 from os.path import join
-from random import choice
+from random import choice, randrange, choices, sample
 
 import numpy as np
 import scipy.sparse as sp
@@ -9,18 +13,30 @@ from skimage.measure import label, regionprops
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from sklearn.decomposition import PCA
+
 from src.clustering.clustering import draw_clusters
-from src.createdata.create_image import get_raster_as_arr, get_grey_color_map, render_simplified
+from src.createdata.create_image import get_raster_as_arr, save_img
 from src.createdata.prepare_data import raster, resolution, format_bbox
 from src.createdata.translate_projection import gdal_translate_window, render_file
 from src.models.grarep.grarep import get_grarep_comps
 from src.models.lae.lae import get_lae_comps
+from src.models.line.line import get_line_comps
 from src.segmenter.funcs import create_np_adj_from_image, adv_simplify, get_border_counts
 from scipy.stats import describe
+
 # there are 21 unique classes in the data
 codes = [11, 12, 21, 22, 23, 24, 31, 32, 41, 42, 43, 51, 52, 71, 72, 73, 74, 81, 82, 90, 95]
 
 num_classes = 17
+output_dir = '.'
+file_stem = 'tmp'
+
+
+# import tensorflow as tf
+#
+# gpu_devices = tf.config.experimental.list_physical_devices('GPU')
+# for device in gpu_devices:
+#     tf.config.experimental.set_memory_growth(device, True)
 
 
 def get_neighbors(adj, node_id):
@@ -74,25 +90,42 @@ def create_dist_pics(arr):
     plt.show()
 
 
+def get_arr_from_coords(x, y, width, height, do_render=False, file_name='rendered.png'):
+    # x and y are in meters while width and height are in pixels
+    width, height = width * resolution, height * resolution
+    bbox = format_bbox(x, y, width, height)
+    if do_render:
+        gdal_translate_window(raster, join(output_dir, file_name), bbox)
+        arr, palette = get_raster_as_arr(join(output_dir, file_name))
+        os.remove(join(output_dir, file_name + '.aux.xml'))
+    else:
+        gdal_translate_window(raster, join(output_dir, file_stem + '.png'), bbox)
+        arr, palette = get_raster_as_arr(join(output_dir, file_stem + '.png'))
+        os.remove(join(output_dir, file_stem + '.png'))
+        os.remove(join(output_dir, file_stem + '.png.aux.xml'))
+    return arr, palette
+
 
 def main():
     output_dir = '.'
     x, y = 534029, 773017
-    x, y = -1937792,2037729
-    x, y = -60845,2186521
+    x, y = -1937792, 2037729
+    x, y = -60845, 2186521
     file_stem = 'tmp'
-    width, height = 300 * resolution, 300 * resolution
+    width, height = 2500 * resolution, 2500 * resolution
 
     bbox = format_bbox(x, y, width, height)
     gdal_translate_window(raster, join(output_dir, file_stem + '.tif'), bbox)
-    render_file(join(output_dir, file_stem + '.tif'), 'simp_merge_small_sections.png',do_simp=True, min_size=5)
+    render_file(join(output_dir, file_stem + '.tif'), 'simp_merge_small_sections.png', do_simp=True, min_size=5)
     arr = get_raster_as_arr(join(output_dir, file_stem + '.tif'))
-    render_simplified(arr // 10, 'simp_super_small_sections.png')
+    # render_simplified(arr // 10, 'simp_super_small_sections.png')
+
     # create_dist_pics(arr)
-    exit()
+
     # arr = adv_simplify(arr, 3)
 
-    # labeled, num_regions = label(arr, return_num=True)
+    labeled, num_regions = label(arr, return_num=True)
+    print(num_regions)
     # props = regionprops(labeled)
     # print(sorted(Counter([prop['area'] for prop in props]).most_common(1000), key=lambda x: (x[1], -x[0])))
     # print(props[0]['bbox'])
@@ -117,9 +150,6 @@ def main():
     os.remove(join(output_dir, file_stem + '.tif'))
     os.remove(join(output_dir, file_stem + '.tif.aux.xml'))
 
-
-
-    exit()
     label_classes, adj, labeled, ignored = create_np_adj_from_image(arr, verbose=True)
 
     # c = np.array([label_classes[x] % 50 for x in range(1, 1 + len(label_classes))])
@@ -152,14 +182,17 @@ def main():
 
     # np.save('labeled',labeled)
     # print(adj.shape)
-    # sp.save_npz(f'adj_{len(label_classes)}', adj)
+    print(adj.dtype)
+    print(type(adj))
+    sp.save_npz(f'adj_{len(label_classes)}', adj)
+    exit()
     # print('Done')
 
     lambda_v = 1
     k = 3
     print(type(sp.csr_matrix(adj)))
     # comps = get_grarep_comps(sp.csr_matrix(adj), k, lambda_v, n_components=3)
-    comps = get_lae_comps(adj)
+    # comps = get_lae_comps(adj)
     # comps = np.hstack([comps, encoding * avg])
     # print(comps.shape)
     np.save('comps', comps)
@@ -185,5 +218,50 @@ def main():
         print()
 
 
+def gen_random_colors(num):
+    all_colors = []
+    for x in range(256):
+        for y in range(256):
+            for z in range(256):
+                all_colors.append((x, y, z))
+    vals = sample(all_colors, num)
+    return np.array(vals, dtype=np.uint8).reshape((-1, 3))
+
+
+def new_main():
+    lambda_v = 1
+    k = 3
+    x, y = -545943, 1348938
+    width, height = 1000, 1000
+    land_cover_arr, palette = get_arr_from_coords(x, y, width, height, do_render=True)
+    labeled, num_regions = label(land_cover_arr, return_num=True)
+    simplified = adv_simplify(labeled, 4)
+
+    # save simplified
+    labeled, num_regions = label(simplified, return_num=True)
+    print(num_regions)
+    pal2 = gen_random_colors(num_regions)
+    save_img('simp.png', labeled - 1, do_map_colors=True, color_map=pal2)
+
+    _, adj, labeled, ignored = create_np_adj_from_image(simplified, verbose=True)
+
+    # comps = get_grarep_comps(sp.csr_matrix(adj), k, lambda_v, n_components=64)
+    comps = get_lae_comps(adj, n_components=64, num_epochs=5000, learning_rate=.1)
+    # comps = get_line_comps(adj)
+    pca = PCA(n_components=3)
+    n = pca.fit_transform(comps)
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+    ax.scatter(n.T[0], n.T[1], n.T[2])
+    plt.show()
+
+    sys.setrecursionlimit(max(sys.getrecursionlimit(), len(comps) + 10))
+
+    for x in range(2, 11):
+        print(f'x: {x}')
+        draw_clusters(comps, labeled, f'{x}clusters.png', n_clusters=x, method='kmeans', ignored=set())
+        print()
+
+
 if __name__ == '__main__':
-    main()
+    new_main()
