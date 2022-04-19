@@ -3,16 +3,41 @@ import xml.etree.ElementTree as ET
 
 import numpy as np
 from PIL import Image
-from osgeo import gdal
+
 
 from src.segmenter.funcs import adv_simplify
 
 
-def get_raster_as_arr(file_path: str):
-    raster = gdal.Open(file_path, gdal.GA_ReadOnly)
-    band = raster.GetRasterBand(1)
-    arr = band.ReadAsArray()
-    return arr
+def get_img_palette(img: Image) -> np.ndarray:
+    return np.array(img.getpalette(), dtype=np.uint8).reshape((-1, 3))
+
+
+def map_colors(arr, color_map):
+    colors = [np.copy(arr) for x in range(3)]
+    for x in range(arr.shape[0]):
+        for y in range(arr.shape[0]):
+            val = arr[x,y]
+            for z in range(3):
+                colors[z][x, y] = color_map[:, z][val]
+    return np.stack(colors, axis=-1).astype(np.uint8)
+
+
+def get_raster_as_arr(file_path: str, rgb=False) -> (np.ndarray, np.ndarray):
+    with Image.open(file_path) as img:
+        if rgb:
+            arr = np.array(img.convert("RGB"))
+        else:
+            arr = np.array(img)
+        palette = get_img_palette(img)
+
+    return arr, palette
+
+
+def save_img(file_path: str, arr: np.ndarray, do_map_colors=False, color_map=None) -> None:
+    if do_map_colors:
+        arr = map_colors(arr, color_map)
+    img = Image.fromarray(arr)
+    img.save(file_path)
 
 
 def get_grey_color_map(file_path: str):
@@ -66,7 +91,7 @@ def map_grey_colors(img_arr, color_map):
     return img_arr
 
 
-def map_colors(img_arr, color_maps):
+def map_colors_old(img_arr, color_maps):
     r_l, g_l, b_l, a_l = color_maps
     img_arr = img_arr.astype(np.uint8)
     img_r = np.vectorize(r_l)(img_arr)
@@ -95,7 +120,7 @@ def render_file(file_path: str, save_path: str, do_simp=False, min_size=10) -> N
         print('Image is all black. Not saving.')
         return
     color_maps = get_color_maps(file_path)
-    img_arr2 = map_colors(img_arr, color_maps)
+    img_arr2 = map_colors_old(img_arr, color_maps)
 
     img = Image.fromarray(img_arr2)
     img.save(save_path)
